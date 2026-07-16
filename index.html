@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آموزش نصب کالاف دیوتی موبایل با گیم‌لوپ هاب | صفر تا صد</title>
+<meta name="description" content="آموزش کامل و مرحله‌به‌مرحله نصب Call of Duty Mobile روی کامپیوتر با GameLoop Hub و COD Mobile Smart Tool — به‌همراه رفع مشکلات، تنظیمات ۳۰۰ FPS و سوالات متداول.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F0F23; --bg-2:#15152e; --surface:#1a1a35; --surface-2:#20203f;
+  --muted:#27273B; --border:#312e5f; --border-glow:#4C1D95;
+  --fg:#E2E8F0; --fg-dim:#9aa3bd; --fg-faint:#6e769a;
+  --primary:#7C3AED; --primary-2:#A78BFA; --accent:#F43F5E;
+  --ok:#22C55E; --warn:#F59E0B; --danger:#EF4444;
+  --radius:16px; --radius-sm:10px;
+  --space-1:8px; --space-2:16px; --space-3:24px; --space-4:32px; --space-5:48px; --space-6:64px;
+  --maxw:1200px;
+  --shadow:0 10px 40px -12px rgba(0,0,0,.7);
+  --glow:0 0 0 1px rgba(124,58,237,.35), 0 0 32px -8px rgba(124,58,237,.55);
+  --t:220ms cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:'Vazirmatn',system-ui,'Segoe UI',sans-serif;
+  font-size:16px; line-height:1.75; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::before{
+  content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(124,58,237,.22), transparent 60%),
+    radial-gradient(700px 420px at 5% 8%, rgba(244,63,94,.13), transparent 60%),
+    linear-gradient(180deg,#0F0F23,#0b0b1b);
+}
+body::after{
+  content:''; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.35;
+  background-image:linear-gradient(rgba(124,58,237,.055) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(124,58,237,.055) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(circle at 50% 0%,#000 0%,transparent 75%);
+  -webkit-mask-image:radial-gradient(circle at 50% 0%,#000 0%,transparent 75%);
+}
+a{color:var(--primary-2);text-decoration:none;transition:color var(--t)}
+a:hover{color:#c4b5fd}
+:focus-visible{outline:2px solid var(--primary-2);outline-offset:3px;border-radius:6px}
+.en{font-family:'Orbitron','Vazirmatn',sans-serif;letter-spacing:.04em}
+.mono{font-family:ui-monospace,'JetBrains Mono',Consolas,monospace;direction:ltr;unicode-bidi:embed}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--space-3)}
+
+/* ---------- progress bar ---------- */
+#bar{position:fixed;top:0;right:0;height:3px;width:0;z-index:60;
+  background:linear-gradient(90deg,var(--accent),var(--primary),var(--primary-2));
+  box-shadow:0 0 12px rgba(124,58,237,.9);transition:width 90ms linear}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+  background:rgba(15,15,35,.78);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
+  height:68px;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--space-3)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.05rem;color:#fff}
+.brand svg{width:30px;height:30px;flex:none}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{padding:8px 14px;border-radius:99px;color:var(--fg-dim);font-size:.9rem;font-weight:500;
+  transition:background var(--t),color var(--t)}
+.nav-links a:hover{background:var(--surface-2);color:#fff}
+.menu-btn{display:none;background:var(--surface-2);border:1px solid var(--border);color:var(--fg);
+  width:44px;height:44px;border-radius:12px;cursor:pointer;align-items:center;justify-content:center}
+.menu-btn svg{width:22px;height:22px}
+@media(max-width:900px){
+  .nav-links{position:fixed;inset:68px 0 auto 0;flex-direction:column;align-items:stretch;
+    background:rgba(15,15,35,.98);border-bottom:1px solid var(--border);padding:var(--space-2);
+    display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:14px;text-align:right}
+  .menu-btn{display:flex}
+}
+
+/* ---------- hero ---------- */
+.hero-shell{position:relative;overflow:hidden;isolation:isolate}
+/* لایه ۱: خود عکس، محو و نرم */
+.hero-shell::before{
+  content:'';position:absolute;inset:0;z-index:-2;
+  background-image:url('assets/hero.png');
+  background-position:center 20%;
+  background-size:cover;
+  background-repeat:no-repeat;
+  opacity:1;
+  filter:blur(1px) saturate(.4);
+  transform:scale(1.06);
+  /* فقط یک ماسک ساده: محو شدن به سمت پایین (فید کناره‌ها با پرده ::after انجام می‌شود) */
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.65) 45%,rgba(0,0,0,.15) 80%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.65) 45%,rgba(0,0,0,.15) 80%,transparent 100%);
+}
+/* لایه ۲: پرده تیره روی عکس تا متن همیشه خوانا بماند */
+.hero-shell::after{
+  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    /* فید کناره‌ها */
+    linear-gradient(to left,var(--bg) 0%,transparent 16%,transparent 84%,var(--bg) 100%),
+    /* تیره کردن مرکز پشت متن + گوشه‌ها */
+    radial-gradient(120% 90% at 50% 30%,rgba(15,15,35,.5) 0%,rgba(15,15,35,.78) 55%,rgba(15,15,35,.95) 100%),
+    /* اتصال نرم به بدنه صفحه */
+    linear-gradient(180deg,rgba(15,15,35,.45) 0%,rgba(15,15,35,.68) 55%,var(--bg) 100%);
+}
+@media(max-width:640px){
+  .hero-shell::before{opacity:.2;filter:blur(4px) saturate(.8)}
+}
+.hero{padding:var(--space-6) 0 var(--space-5);text-align:center;position:relative}
+/* ---------- hero tags (سازندگان) ---------- */
+.hero-tags{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+  margin-bottom:var(--space-3)}
+.hero-tags .badge{margin-bottom:0}
+/* برچسب «سازندگان» کنار تگ‌ها */
+.makers{display:inline-flex;align-items:center;gap:8px;padding:5px 6px 5px 14px;border-radius:99px;
+  background:rgba(15,15,35,.5);border:1px dashed var(--border-glow)}
+.makers-label{font-size:.74rem;font-weight:700;color:var(--primary-2);white-space:nowrap;
+  letter-spacing:.02em}
+
+/* ---------- credits band (استریمرها) ---------- */
+.credits-band{display:flex;justify-content:center;padding:var(--space-2) var(--space-3) 0}
+.credits{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+  padding:7px 9px 7px 20px;border-radius:99px;
+  background:linear-gradient(120deg,rgba(124,58,237,.2),rgba(244,63,94,.15));
+  border:1px solid var(--primary);
+  box-shadow:0 8px 34px -10px rgba(124,58,237,.95)}
+.credits-label{font-size:.92rem;font-weight:900;color:#fff;white-space:nowrap;
+  letter-spacing:.01em}
+.creator{display:inline-flex;align-items:center;gap:8px;padding:3px 14px 3px 3px;border-radius:99px;
+  background:rgba(15,15,35,.72);border:1px solid var(--border);color:var(--fg);
+  font-size:.95rem;font-weight:700;min-height:42px;
+  transition:transform var(--t),border-color var(--t),background var(--t)}
+.creator:hover{transform:translateY(-2px);border-color:var(--primary-2);
+  background:rgba(15,15,35,.95);color:#fff}
+.creator img{width:34px;height:34px;border-radius:50%;object-fit:cover;flex:none;
+  background:var(--muted);border:2px solid var(--primary-2)}
+.creator .live{display:inline-flex;align-items:center;gap:4px;font-family:'Orbitron',sans-serif;
+  font-size:.64rem;font-weight:900;color:var(--accent);letter-spacing:.08em}
+.creator .live i{width:6px;height:6px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 0 rgba(244,63,94,.7);animation:pulse 2s infinite;font-style:normal}
+@media(max-width:560px){
+  .credits{padding:12px 14px;border-radius:20px}
+  .credits-label{width:100%;text-align:center}
+}
+
+/* ---------- made-by tag (مینیمال) ---------- */
+.madeby{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:99px;
+  background:rgba(124,58,237,.1);border:1px solid var(--border-glow);
+  transition:transform var(--t),border-color var(--t),background var(--t)}
+.madeby:hover{transform:translateY(-2px);border-color:var(--primary-2);
+  background:rgba(124,58,237,.22)}
+.madeby-label{font-size:.78rem;color:var(--fg-faint);white-space:nowrap}
+.madeby-name{font-family:'Orbitron',sans-serif;font-weight:900;font-size:.8rem;
+  background:linear-gradient(100deg,var(--primary-2),var(--accent));
+  -webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.04em}
+.madeby svg{width:14px;height:14px;color:var(--primary-2);flex:none;
+  transition:color var(--t)}
+.madeby:hover svg{color:var(--accent)}
+.madeby-ig{width:13px;height:13px;opacity:.7}
+/* نسخه کامل فوتر */
+.madeby-full{gap:9px;padding:8px 16px}
+.madeby-full .madeby-name{font-size:.92rem}
+.madeby-full svg{width:16px;height:16px}
+.madeby-full .madeby-ig{width:15px;height:15px}
+
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:99px;
+  background:rgba(124,58,237,.12);border:1px solid var(--border-glow);color:var(--primary-2);
+  font-size:.82rem;font-weight:500;margin-bottom:var(--space-3)}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);
+  box-shadow:0 0 0 0 rgba(34,197,94,.7);animation:pulse 2.2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+h1{font-size:clamp(2rem,5.4vw,3.6rem);line-height:1.3;font-weight:900;color:#fff;
+  letter-spacing:-.01em;margin-bottom:var(--space-2)}
+h1 .grad{background:linear-gradient(100deg,var(--primary-2),var(--accent));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:clamp(1rem,2vw,1.18rem);color:var(--fg-dim);max-width:62ch;margin:0 auto var(--space-4)}
+.cta-row{display:flex;gap:var(--space-2);justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:12px;
+  font-weight:700;font-size:.98rem;cursor:pointer;border:1px solid transparent;
+  transition:transform var(--t),box-shadow var(--t),background var(--t);min-height:48px}
+.btn svg{width:19px;height:19px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),#9333ea);color:#fff;
+  box-shadow:0 8px 28px -8px rgba(124,58,237,.85)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(124,58,237,1);color:#fff}
+.btn-ghost{background:var(--surface-2);border-color:var(--border);color:var(--fg)}
+.btn-ghost:hover{background:var(--muted);transform:translateY(-2px);color:#fff}
+.stats{display:flex;gap:var(--space-4);justify-content:center;flex-wrap:wrap;margin-top:var(--space-5)}
+.stat{text-align:center}
+.stat b{display:block;font-size:1.7rem;font-weight:900;color:#fff}
+.stat span{font-size:.82rem;color:var(--fg-faint)}
+
+/* ---------- sections ---------- */
+section{padding:var(--space-6) 0;scroll-margin-top:88px}
+.sec-head{margin-bottom:var(--space-4);max-width:70ch}
+.kicker{font-size:.78rem;font-weight:700;color:var(--accent);letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:10px}
+h2{font-size:clamp(1.5rem,3.4vw,2.15rem);font-weight:900;color:#fff;line-height:1.35;margin-bottom:10px}
+.sec-head p{color:var(--fg-dim)}
+h3{font-size:1.12rem;font-weight:700;color:#fff;margin-bottom:8px}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:var(--space-2)}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:linear-gradient(160deg,var(--surface),var(--bg-2));
+  border:1px solid var(--border);border-radius:var(--radius);padding:var(--space-3);
+  transition:border-color var(--t),transform var(--t),box-shadow var(--t)}
+.card:hover{border-color:var(--border-glow);transform:translateY(-3px);box-shadow:var(--shadow)}
+.card p{color:var(--fg-dim);font-size:.92rem}
+.ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;
+  background:rgba(124,58,237,.14);border:1px solid var(--border-glow);color:var(--primary-2)}
+.ico svg{width:22px;height:22px}
+
+/* ---------- steps ---------- */
+.steps-layout{display:grid;grid-template-columns:250px 1fr;gap:var(--space-4);align-items:start}
+@media(max-width:1000px){.steps-layout{grid-template-columns:1fr}.rail{display:none}}
+.rail{position:sticky;top:96px}
+.rail h4{font-size:.78rem;color:var(--fg-faint);letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:var(--space-2);font-weight:700}
+.rail ol{list-style:none;border-right:2px solid var(--border);padding-right:0}
+.rail li a{display:flex;gap:10px;align-items:center;padding:9px 14px;font-size:.86rem;
+  color:var(--fg-faint);border-right:2px solid transparent;margin-right:-2px;
+  transition:color var(--t),border-color var(--t)}
+.rail li a:hover{color:var(--fg)}
+.rail li a.active{color:#fff;font-weight:700;border-right-color:var(--primary-2)}
+.rail li a .n{width:22px;height:22px;border-radius:6px;background:var(--muted);color:var(--fg-faint);
+  display:grid;place-items:center;font-size:.72rem;font-weight:700;flex:none;transition:all var(--t)}
+.rail li a.active .n{background:var(--primary);color:#fff}
+
+.step{position:relative;background:linear-gradient(160deg,var(--surface),var(--bg-2));
+  border:1px solid var(--border);border-radius:var(--radius);padding:var(--space-3);
+  margin-bottom:var(--space-2);scroll-margin-top:96px;transition:border-color var(--t)}
+.step:hover{border-color:var(--border-glow)}
+.step-head{display:flex;gap:var(--space-2);align-items:flex-start;margin-bottom:var(--space-2)}
+.step-n{flex:none;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;
+  font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.15rem;color:#fff;
+  background:linear-gradient(135deg,var(--primary),#6d28d9);
+  box-shadow:0 0 0 1px rgba(167,139,250,.3),0 6px 22px -8px rgba(124,58,237,.9)}
+.step-title{font-size:1.2rem;font-weight:700;color:#fff;line-height:1.5}
+.step-sub{font-size:.85rem;color:var(--fg-faint);font-weight:400}
+.step-body{padding-inline-start:64px}
+@media(max-width:640px){.step-body{padding-inline-start:0}}
+.step-body p{color:var(--fg-dim);margin-bottom:12px}
+.step-body ul,.step-body ol{margin:0 0 12px;padding-inline-start:22px;color:var(--fg-dim)}
+.step-body li{margin-bottom:7px}
+.step-body li::marker{color:var(--primary-2)}
+.step-body strong{color:#fff;font-weight:700}
+
+/* ---------- callouts ---------- */
+.note{display:flex;gap:12px;padding:14px 16px;border-radius:var(--radius-sm);margin:14px 0;
+  font-size:.9rem;line-height:1.7;border:1px solid;background:var(--surface-2)}
+.note svg{width:20px;height:20px;flex:none;margin-top:3px}
+.note b{display:block;margin-bottom:2px;font-weight:700}
+.note-tip{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.07);color:#bbf7d0}
+.note-tip svg,.note-tip b{color:var(--ok)}
+.note-warn{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.07);color:#fde68a}
+.note-warn svg,.note-warn b{color:var(--warn)}
+.note-danger{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.07);color:#fecaca}
+.note-danger svg,.note-danger b{color:var(--danger)}
+.note-info{border-color:var(--border-glow);background:rgba(124,58,237,.08);color:#ddd6fe}
+.note-info svg,.note-info b{color:var(--primary-2)}
+
+.chip{display:inline-block;padding:3px 10px;border-radius:7px;background:var(--muted);
+  border:1px solid var(--border);font-size:.82rem;font-weight:500;color:#fff;
+  font-family:ui-monospace,Consolas,monospace;direction:ltr;unicode-bidi:embed}
+.chip-a{background:rgba(244,63,94,.14);border-color:rgba(244,63,94,.4);color:#fda4af}
+
+/* ---------- telegram / community ---------- */
+.tg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-2)}
+.tg-card{position:relative;overflow:hidden;display:flex;flex-direction:column;
+  background:linear-gradient(160deg,var(--surface),var(--bg-2));
+  border:1px solid var(--border);border-radius:var(--radius);padding:var(--space-3);
+  transition:border-color var(--t),transform var(--t),box-shadow var(--t)}
+.tg-card:hover{transform:translateY(-4px);border-color:#29A9EB;
+  box-shadow:0 16px 44px -14px rgba(41,169,235,.55)}
+.tg-card::after{content:'';position:absolute;top:-40%;left:-20%;width:220px;height:220px;
+  border-radius:50%;background:radial-gradient(circle,rgba(41,169,235,.18),transparent 70%);
+  pointer-events:none}
+.tg-ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;margin-bottom:14px;
+  background:linear-gradient(135deg,#29A9EB,#1C7CBF);color:#fff;flex:none;
+  box-shadow:0 8px 22px -8px rgba(41,169,235,.9)}
+.tg-ico svg{width:26px;height:26px}
+.tg-card h3{margin-bottom:6px}
+.tg-handle{font-family:ui-monospace,Consolas,monospace;direction:ltr;unicode-bidi:embed;
+  font-size:.82rem;color:#7cc9f2;margin-bottom:10px}
+.tg-card p{color:var(--fg-dim);font-size:.92rem;margin-bottom:16px;flex:1}
+.tg-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:12px 20px;border-radius:12px;font-weight:700;font-size:.92rem;min-height:46px;
+  background:linear-gradient(135deg,#29A9EB,#1C7CBF);color:#fff;
+  box-shadow:0 8px 24px -10px rgba(41,169,235,.95);
+  transition:transform var(--t),box-shadow var(--t)}
+.tg-btn:hover{transform:translateY(-2px);color:#fff;
+  box-shadow:0 14px 32px -10px rgba(41,169,235,1)}
+.tg-btn svg{width:18px;height:18px}
+.tg-btn.alt{background:var(--surface-2);border:1px solid #29A9EB;color:#9dd6f5;box-shadow:none}
+.tg-btn.alt:hover{background:rgba(41,169,235,.16);color:#fff}
+
+/* ---------- table ---------- */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--surface)}
+table{width:100%;border-collapse:collapse;min-width:520px;font-size:.9rem}
+th,td{padding:13px 16px;text-align:right;border-bottom:1px solid var(--border)}
+th{background:var(--surface-2);color:#fff;font-weight:700;font-size:.85rem;white-space:nowrap}
+td{color:var(--fg-dim)}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background var(--t)}
+tbody tr:hover{background:rgba(124,58,237,.05)}
+td .chip{font-size:.78rem}
+
+/* ---------- faq ---------- */
+.faq{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+.faq details{border-bottom:1px solid var(--border)}
+.faq details:last-child{border-bottom:none}
+.faq summary{padding:18px 20px;cursor:pointer;font-weight:700;color:#fff;font-size:.98rem;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;list-style:none;
+  min-height:56px;transition:background var(--t)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{background:var(--surface-2)}
+.faq summary .arw{flex:none;width:26px;height:26px;border-radius:8px;background:var(--muted);
+  display:grid;place-items:center;transition:transform var(--t),background var(--t);color:var(--primary-2)}
+.faq summary .arw svg{width:15px;height:15px}
+.faq details[open] summary{background:var(--surface-2)}
+.faq details[open] summary .arw{transform:rotate(180deg);background:var(--primary);color:#fff}
+.faq .ans{padding:0 20px 18px;color:var(--fg-dim);font-size:.92rem;line-height:1.85;
+  animation:slide var(--t) ease-out}
+.faq .ans strong{color:#fff}
+@keyframes slide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--border);padding:var(--space-5) 0 var(--space-3);
+  background:rgba(11,11,27,.6);margin-top:var(--space-5)}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-4)}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr;gap:var(--space-3)}}
+footer p{color:var(--fg-faint);font-size:.88rem}
+footer h5{color:#fff;font-weight:700;margin-bottom:12px;font-size:.95rem}
+footer ul{list-style:none}
+footer ul li{margin-bottom:8px}
+footer ul a{color:var(--fg-dim);font-size:.88rem}
+.copy{border-top:1px solid var(--border);padding-top:var(--space-3);text-align:center;
+  color:var(--fg-faint);font-size:.82rem}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease-out,transform .6s cubic-bezier(.22,.61,.36,1)}
+.rv.in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<header>
+  <nav class="nav">
+    <a href="#top" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24">
+          <stop offset="0" stop-color="#A78BFA"/><stop offset="1" stop-color="#F43F5E"/></linearGradient></defs>
+        <rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4M8 10v4"/>
+        <circle cx="16" cy="11" r="1"/><circle cx="18.5" cy="13.5" r="1"/>
+      </svg>
+      <span>گیم‌لوپ هاب <span style="color:var(--fg-faint);font-weight:400">| کالاف موبایل</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#requirements">پیش‌نیازها</a>
+      <a href="#steps">مراحل نصب</a>
+      <a href="#settings">تنظیمات</a>
+      <a href="#troubleshoot">رفع مشکل</a>
+      <a href="#faq">سوالات متداول</a>
+      <a href="#community">پشتیبانی</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="باز کردن منو" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<div class="hero-shell">
+<div class="hero wrap">
+  <div class="hero-tags rv">
+    <div class="badge"><span class="dot"></span> به‌روزرسانی ۱۴۰۵ — نسخه <span class="mono">2.1.2</span> گیم لوپ هاب</div>
+    <div class="makers">
+      <span class="makers-label">سازندگان سایت</span>
+      <a class="madeby" href="https://www.instagram.com/lhadirahimil/" target="_blank" rel="noopener noreferrer" title="Dude PC — اینستاگرام" aria-label="Dude PC — اینستاگرام">
+        <svg class="madeby-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        <span class="madeby-name">Dude PC</span>
+      </a>
+      <a class="madeby" href="https://www.instagram.com/mnf1998/" target="_blank" rel="noopener noreferrer" title="mnf1998 — اینستاگرام" aria-label="mnf1998 — اینستاگرام">
+        <svg class="madeby-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        <span class="madeby-name">mnf1998</span>
+      </a>
+    </div>
+  </div>
+  <h1>آموزش صفر تا صد نصب <span class="grad">کالاف دیوتی موبایل</span><br>روی کامپیوتر با گیم‌لوپ هاب</h1>
+  <p class="lead">
+    نسخه جدید <span class="en">GameLoop Hub</span> نسبت به گیم‌لوپ قدیمی عملکرد به‌مراتب بهتری دارد.
+    در این راهنما تمام مراحل — از <span class="en">VPN</span> و دانلود تا اسمارت تول، کی‌مپ، بوست فریم و رفع مشکلات رایج — قدم‌به‌قدم توضیح داده شده است.
+  </p>
+  <div class="cta-row">
+    <a href="#steps" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      شروع آموزش از مرحله ۱
+    </a>
+    <a href="#troubleshoot" class="btn btn-ghost">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+      مشکل دارم، برو به رفع اشکال
+    </a>
+  </div>
+  <div class="stats">
+    <div class="stat rv"><b class="en">۱۰</b><span>مرحله نصب</span></div>
+    <div class="stat rv"><b class="en">240</b><span>فریم پیشنهادی (FPS)</span></div>
+    <div class="stat rv"><b class="en">~۹۰</b><span>مگابایت حجم ابزارها</span></div>
+    <div class="stat rv"><b class="en">۲۹</b><span>سوال متداول</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ============ CREDITS BAND ============ -->
+<div class="credits-band">
+  <div class="credits rv">
+    <span class="credits-label">برای اولین بار توسط</span>
+    <a class="creator" href="https://www.aparat.com/thez13/live/" target="_blank" rel="noopener noreferrer">
+      <img src="assets/z13.webp" alt="Z13" loading="lazy" width="34" height="34">
+      <span>Z13</span>
+      <span class="live"><i></i>LIVE</span>
+    </a>
+    <a class="creator" href="https://www.aparat.com/Snipergirl/live" target="_blank" rel="noopener noreferrer">
+      <img src="assets/snipergirl.webp" alt="SniperGirl" loading="lazy" width="34" height="34">
+      <span>SniperGirl</span>
+      <span class="live"><i></i>LIVE</span>
+    </a>
+  </div>
+</div>
+
+<!-- ============ REQUIREMENTS ============ -->
+<section id="requirements" class="wrap">
+  <div class="sec-head rv">
+    <div class="kicker">قبل از شروع</div>
+    <h2>پیش‌نیازها را اول آماده کنید</h2>
+    <p>اگر این چهار مورد را از ابتدا درست انجام دهید، ۹۰٪ مشکلات رایج اصلاً پیش نمی‌آید. مخصوصاً مورد دوم که مهم‌ترین عامل روان بودن بازی است.</p>
+  </div>
+
+  <div class="grid g3">
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20 15 15 0 010-20"/></svg></div>
+      <h3>۱. یک VPN یا گیم‌وی‌پی‌ان سالم</h3>
+      <p>سایت رسمی گیم‌لوپ و سرورهای دانلود از ایران به‌درستی باز نمی‌شوند. برای دانلود فایل‌ها و ورود به پلی‌استور حتماً به یک وی‌پی‌ان پایدار (ترجیحاً گیم‌وی‌پی‌ان با پینگ پایین) نیاز دارید.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
+      <h3>۲. فعال بودن مجازی‌سازی (VT)</h3>
+      <p>مهم‌ترین تنظیم! موتور گیم‌لوپ روی <span class="chip">Intel VT-x</span> یا <span class="chip">AMD-V / SVM</span> کار می‌کند. اگر خاموش باشد، شبیه‌ساز روی حالت نرم‌افزاری کند می‌افتد و هیچ مقدار رم اضافه‌ای نجاتش نمی‌دهد. <strong>روش چک کردن و روشن کردنش پایین همین بخش آمده است.</strong></p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+      <h3>۳. سخت‌افزار حداقلی</h3>
+      <p>حداقل: CPU دو هسته‌ای ۱.۸ گیگاهرتز، ۴ گیگ رم، گرافیک سازگار با <span class="chip">DirectX 11</span>. پیشنهادی برای تجربه روان: <span class="chip">Core i3 2.6GHz</span> به بالا با ۸ تا ۱۶ گیگ رم.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg></div>
+      <h3>۴. فضای خالی دیسک</h3>
+      <p>با احتساب شبیه‌ساز، Arena Breakout و خود کالاف، حدود ۱۵ تا ۲۰ گیگابایت جا می‌گیرد. ترجیحاً روی <span class="en">SSD</span> نصب کنید — زمان لود و استریم بافت‌ها محسوس بهتر می‌شود.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <h3>۵. آنتی‌ویروس و Defender</h3>
+      <p>ویندوز دیفندر و آنتی‌ویروس‌ها معمولاً اسمارت تول را به‌عنوان تهدید شناسایی می‌کنند (چون فایل کانفیگ شبیه‌ساز را ویرایش می‌کند). قبل از نصب، پوشه گیم‌لوپ را در لیست استثنا قرار دهید.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <h3>۶. یک اکانت گوگل</h3>
+      <p>برای ورود به پلی‌استور داخل شبیه‌ساز لازم است. اگر اکانت کالاف فعلی دارید، حتماً قبلش آن را به <span class="en">Activision</span> بایند کنید تا پیشرفتتان امن بماند.</p>
+    </div>
+  </div>
+
+  <div class="note note-info rv" style="margin-top:var(--space-3)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <div>
+      <b>قدم اول: اول چک کنید VT اصلاً روشن است یا نه</b>
+      قبل از اینکه سراغ بایوس بروید، ببینید اصلاً لازم است یا نه. از <strong>تسک منیجر</strong> در ۱۵ ثانیه معلوم می‌شود:
+      <ol style="margin:10px 0 4px;padding-inline-start:22px">
+        <li>کلیدهای <span class="chip">Ctrl</span> + <span class="chip">Shift</span> + <span class="chip">Esc</span> را با هم بزنید تا تسک منیجر باز شود.</li>
+        <li>به تب <span class="chip">Performance</span> (عملکرد) بروید.</li>
+        <li>از ستون کنار، روی <span class="chip">CPU</span> کلیک کنید.</li>
+        <li>در پایین سمت راست، بین مشخصات پردازنده دنبال خط <span class="chip">Virtualization</span> بگردید.</li>
+      </ol>
+      اگر جلویش نوشته <strong style="color:var(--ok)">Enabled</strong> یعنی روشن است و <strong>کاری با بایوس ندارید</strong> — مستقیم بروید سراغ مرحله ۱.
+      اگر نوشته <strong style="color:var(--danger)">Disabled</strong>، طبق راهنمای زیر روشنش کنید.
+    </div>
+  </div>
+
+  <div class="note note-warn rv">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+    <div>
+      <b>قدم دوم: اگر Disabled بود، از بایوس روشنش کنید</b>
+      کامپیوتر را ری‌استارت کنید و هنگام بالا آمدن یکی از کلیدهای <span class="chip">Del</span> / <span class="chip">F2</span> / <span class="chip">F10</span> را بزنید تا وارد بایوس شوید. دنبال گزینه‌ای با نام
+      <span class="chip">Virtualization</span>، <span class="chip">VT-x</span>، <span class="chip">SVM Mode</span> یا <span class="chip">Intel Virtual Technology</span> بگردید (معمولاً در تب <span class="en">Advanced</span> یا <span class="en">CPU Configuration</span>)، آن را روی <span class="chip">Enabled</span> بگذارید و با <span class="chip">F10</span> ذخیره و خارج شوید. بعد از بالا آمدن ویندوز، <strong>دوباره با تسک منیجر چک کنید</strong> که واقعاً Enabled شده باشد.
+    </div>
+  </div>
+
+  <div class="note note-tip rv">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    <div>
+      <b>اگر خط Virtualization اصلاً در تسک منیجر نبود</b>
+      در بعضی نسخه‌های ویندوز ۱۱ این خط نمایش داده نمی‌شود. در این حالت <span class="chip">Win</span> + <span class="chip">R</span> را بزنید، عبارت <span class="chip">msinfo32</span> را تایپ کنید و اینتر بزنید. در پنجره <span class="en">System Information</span> دنبال خط <span class="chip">Virtualization-based security</span> یا <span class="chip">Hyper-V - Virtualization Enabled In Firmware</span> بگردید — همان جواب را می‌دهد.
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEPS ============ -->
+<section id="steps" class="wrap">
+  <div class="sec-head rv">
+    <div class="kicker">آموزش اصلی</div>
+    <h2>مراحل نصب، قدم به قدم</h2>
+    <p>ترتیب مراحل مهم است. از مرحله ۱ شروع کنید و هیچ‌کدام را جا نیندازید — مخصوصاً مرحله ۴ (نصب Arena Breakout از سایت رسمی) که خیلی‌ها ردش می‌کنند و بعد گیر می‌کنند.</p>
+  </div>
+
+  <div class="steps-layout">
+    <aside class="rail">
+      <h4>فهرست مراحل</h4>
+      <ol id="rail">
+        <li><a href="#s1"><span class="n">۱</span> روشن کردن VPN</a></li>
+        <li><a href="#s2"><span class="n">۲</span> دانلود گیم‌لوپ هاب</a></li>
+        <li><a href="#s3"><span class="n">۳</span> نصب و بررسی</a></li>
+        <li><a href="#s4"><span class="n">۴</span> نصب Arena Breakout</a></li>
+        <li><a href="#s5"><span class="n">۵</span> نصب اسمارت تول</a></li>
+        <li><a href="#s6"><span class="n">۶</span> پلی‌استور و لاگین</a></li>
+        <li><a href="#s7"><span class="n">۷</span> نصب کالاف موبایل</a></li>
+        <li><a href="#s8"><span class="n">۸</span> سه دکمه به ترتیب</a></li>
+        <li><a href="#s9"><span class="n">۹</span> لانچ بازی</a></li>
+        <li><a href="#s10"><span class="n">۱۰</span> سینک و اکسپورت کی‌مپ</a></li>
+      </ol>
+    </aside>
+
+    <div class="steps">
+
+      <!-- STEP 1 -->
+      <article class="step rv" id="s1">
+        <div class="step-head">
+          <div class="step-n">۱</div>
+          <div>
+            <div class="step-title">وی‌پی‌ان را روشن کنید</div>
+            <div class="step-sub">زمان تقریبی: ۱ دقیقه</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>قبل از هر کاری، وی‌پی‌ان یا گیم‌وی‌پی‌ان خود را وصل کنید. بدون آن، سایت رسمی گیم‌لوپ باز نمی‌شود و دانلود فایل‌ها یا وسط راه قطع می‌شود یا اصلاً شروع نمی‌شود.</p>
+          <ul>
+            <li>یک سرور <strong>پایدار با پینگ پایین</strong> انتخاب کنید — نه لزوماً سریع‌ترین سرور.</li>
+            <li>وی‌پی‌ان را تا <strong>پایان مرحله ۷</strong> روشن نگه دارید (دانلود Arena Breakout و خود بازی هم به آن نیاز دارد).</li>
+            <li>هنگام <strong>بازی کردن</strong> بهتر است وی‌پی‌ان معمولی را خاموش کنید تا پینگ بالا نرود؛ فقط اگر گیم‌وی‌پی‌ان اختصاصی دارید روشن بماند.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- STEP 2 -->
+      <article class="step rv" id="s2">
+        <div class="step-head">
+          <div class="step-n">۲</div>
+          <div>
+            <div class="step-title">گیم‌لوپ هاب را از صفحه دانلود بگیرید</div>
+            <div class="step-sub">حجم فایل نصاب: حدود ۷.۸ مگابایت</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>گیم‌لوپ هاب را از این صفحه دانلود کنید:</p>
+          <p style="margin-bottom:14px">
+            <a href="https://gameloophub.com/download-gameloop/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size:.9rem;padding:12px 22px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+              gameloophub.com/download-gameloop
+            </a>
+          </p>
+          <div class="note note-info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <div>
+              <b>چرا گیم‌لوپ هاب و نه گیم‌لوپ قدیمی؟</b>
+              نسخه هاب موتور جدیدتری دارد، مصرف منابع بهینه‌تر است و کی‌مپ‌های آماده جامعه کاربری روی آن پشتیبانی می‌شود. عملکرد آن نسبت به نسخه قبلی به‌طور محسوسی بهتر است.
+            </div>
+          </div>
+          <div class="note note-danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+            <div>
+              <b>فقط از همین منابع دانلود کنید</b>
+              نسخه‌های «کرک‌شده»، «بوستر رایگان» یا فایل‌های کانال‌های ناشناس تقریباً همیشه آلوده به بدافزار یا استیلر هستند و می‌توانند اکانت شما را بدزدند.
+            </div>
+          </div>
+          <p>فایل نصاب حجم کمی دارد (حدود <span class="chip">7.8 MB</span>) چون فقط یک لانچر است؛ بقیه اجزا بعد از اجرا دانلود می‌شوند.</p>
+        </div>
+      </article>
+
+      <!-- STEP 3 -->
+      <article class="step rv" id="s3">
+        <div class="step-head">
+          <div class="step-n">۳</div>
+          <div>
+            <div class="step-title">نصب کنید و درست بودن نصب را بررسی کنید</div>
+            <div class="step-sub">زمان تقریبی: ۳ تا ۱۰ دقیقه</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <ol>
+            <li>روی فایل دانلودشده <strong>راست‌کلیک</strong> کنید و <span class="chip">Run as administrator</span> را بزنید.</li>
+            <li>مسیر نصب را ترجیحاً روی درایوی غیر از ویندوز و ترجیحاً <strong>SSD</strong> انتخاب کنید.</li>
+            <li>صبر کنید تا اجزای اصلی دانلود و نصب شوند (به سرعت اینترنت بستگی دارد).</li>
+          </ol>
+          <p>بعد از نصب، صفحه اصلی گیم‌لوپ هاب باز می‌شود. اگر نصب <strong>درست</strong> انجام شده باشد، علامت مخصوص آن را در صفحه می‌بینید و هیچ اخطار قرمزی درباره مجازی‌سازی نمایش داده نمی‌شود.</p>
+          <div class="note note-warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div>
+              <b>اگر پیام «Virtualization is disabled» دیدید</b>
+              همین‌جا متوقف شوید و اول VT را از بایوس روشن کنید (توضیحش در بخش پیش‌نیازها آمده). ادامه دادن بدون آن یعنی بازیِ غیرقابل‌بازی.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STEP 4 -->
+      <article class="step rv" id="s4">
+        <div class="step-head">
+          <div class="step-n">۴</div>
+          <div>
+            <div class="step-title">بازی Arena Breakout را از سایت <u>رسمی</u> گیم‌لوپ نصب کنید</div>
+            <div class="step-sub">این مرحله را جا نیندازید — بدون آن ادامه کار نمی‌دهد</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>این‌بار وارد <strong>سایت رسمی</strong> گیم‌لوپ یعنی <a href="https://www.gameloop.com" target="_blank" rel="noopener noreferrer" class="en">gameloop.com</a> شوید و بازی <strong class="en">Arena Breakout: Realistic FPS</strong> را دانلود و نصب کنید.</p>
+          <p style="margin-bottom:14px">
+            <a href="https://www.gameloop.com/game/action/arena-breakout-on-pc" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="font-size:.9rem;padding:12px 22px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+              صفحه Arena Breakout در سایت رسمی
+            </a>
+          </p>
+          <div class="note note-info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <div>
+              <b>«ولی من که می‌خواهم کالاف بازی کنم!»</b>
+              درست است — قرار نیست Arena Breakout بازی کنید. نصب این بازی از سایت رسمی، <strong>هسته و محیط اندروید شبیه‌ساز</strong> را روی سیستم شما می‌آورد؛ همان چیزی که گیم‌لوپ هاب برای اجرای کالاف به آن نیاز دارد. بعد از این مرحله دیگر کاری با خود Arena Breakout ندارید.
+            </div>
+          </div>
+          <div class="note note-warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div>
+              <b>اینجا به یک شیلترشکن خوب نیاز دارید</b>
+              این مرحله بیشتر از بقیه به کیفیت وی‌پی‌ان حساس است. با وی‌پی‌ان ضعیف یا دانلود نصفه‌ونیمه می‌ماند، یا نسخه اشتباه برایتان نصب می‌شود.
+            </div>
+          </div>
+          <div class="note note-danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div>
+              <b>اگر بعد از نصب یک پنجره چینی باز شد</b>
+              یعنی نسخه چینی به‌جای نسخه گلوبال برایتان نصب شده است. در این حالت: <strong>کاملاً پاکش کنید، شیلترشکن را به یک سرور یا سرویس دیگر عوض کنید و دوباره امتحان کنید</strong>. تا وقتی پنجره چینی می‌آید، ادامه ندهید — بقیه مراحل درست کار نخواهد کرد.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STEP 5 -->
+      <article class="step rv" id="s5">
+        <div class="step-head">
+          <div class="step-n">۵</div>
+          <div>
+            <div class="step-title">اسمارت تول را دانلود و نصب کنید</div>
+            <div class="step-sub">حجم: حدود ۸۰ مگابایت — نصب سریع</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>حالا برگردید به <a href="https://gameloophub.com" target="_blank" rel="noopener noreferrer" class="en">gameloophub.com</a> و اسمارت تول را بگیرید. راه پیدا کردنش: کمی به پایین اسکرول کنید، روی <span class="chip">View More</span> بزنید، وارد <span class="chip">Call of Duty Mobile Smart Tool Setup</span> شوید و از آنجا <span class="chip">COD Mobile Smart Tool</span> را دانلود کنید. یا مستقیم:</p>
+          <p style="margin-bottom:14px">
+            <a href="https://gameloophub.com/tools/cod-mobile-smart-tool/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="font-size:.9rem;padding:12px 22px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+              صفحه COD Mobile Smart Tool
+            </a>
+          </p>
+          <p>روی فایل نصب کلیک کنید. حجمش حدود <span class="chip">80 MB</span> است و خیلی سریع نصب می‌شود.</p>
+          <p><strong>محیط ابزار (نسخه <span class="en">V2.1.2</span>) را بشناسید:</strong></p>
+          <ul>
+            <li><span class="chip">GAME VERSION</span> — نسخه بازی. برای اکثر ما روی <span class="chip">Global</span> است.</li>
+            <li><span class="chip">FPS</span> — انتخاب فریم‌ریت هدف (۲۴۰ پیشنهاد می‌شود، توضیح در مرحله ۹).</li>
+            <li><span class="chip">BOOST FPS</span> — دکمه نارنجی بزرگ؛ فریم را اعمال می‌کند.</li>
+            <li><span class="chip">APPLY KEYMAP</span> — کی‌مپ بهینه‌شده را وارد می‌کند.</li>
+            <li><span class="chip">RESTORE DB</span> — فایل کانفیگ شبیه‌ساز را به حالت پیش‌فرض بهینه برمی‌گرداند.</li>
+            <li>پنل <strong>لاگ سمت راست</strong> — هر کاری که انجام می‌دهید اینجا ثبت می‌شود؛ برای عیب‌یابی دکمه <span class="chip">COPY</span> دارد.</li>
+            <li><strong>بالا سمت راست</strong> — آیکون پلی‌استور، آیکون کالاف دیوتی موبایل (دکمه اجرای بازی) و دکمه خاموش کردن.</li>
+          </ul>
+          <div class="note note-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>
+            <div>
+              <b>نکته</b>
+              اسمارت تول را همیشه با <strong>Run as administrator</strong> اجرا کنید، وگرنه اجازه ویرایش فایل <span class="chip">configs.db</span> شبیه‌ساز را ندارد و تنظیمات اعمال نمی‌شود.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STEP 6 -->
+      <article class="step rv" id="s6">
+        <div class="step-head">
+          <div class="step-n">۶</div>
+          <div>
+            <div class="step-title">در گیم‌لوپ هاب روی آیکون پلی‌استور بزنید و با جیمیل لاگین کنید</div>
+            <div class="step-sub">اینجا وی‌پی‌ان باید حتماً روشن باشد</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>گیم‌لوپ هاب را باز کنید. در <strong>بالا سمت راست</strong>، روی <strong>آیکون پلی‌استور</strong> کلیک کنید و با <strong>اکانت جیمیل</strong> خود لاگین شوید. این مرحله برای نصب بازی و خرید بتل‌پس ضروری است.</p>
+          <div class="note note-warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div>
+              <b>اگر لاگین گوگل خطا داد</b>
+              اول <strong>Auto Login</strong> را خاموش کنید، یک‌بار کامل <strong>Log out</strong> کنید، وی‌پی‌ان را روی سرور دیگری بگذارید و دوباره امتحان کنید. همچنین مطمئن شوید <span class="en">Google Play Services</span> داخل شبیه‌ساز به‌روز است.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STEP 7 -->
+      <article class="step rv" id="s7">
+        <div class="step-head">
+          <div class="step-n">۷</div>
+          <div>
+            <div class="step-title">کالاف دیوتی موبایل را نصب کنید</div>
+            <div class="step-sub">زمان: بسته به اینترنت، ۳۰ دقیقه تا چند ساعت</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <ol>
+            <li>در بخش <span class="en">Game Center</span> یا پلی‌استور، عبارت <span class="chip">Call of Duty: Mobile</span> را جستجو کنید.</li>
+            <li>روی <span class="chip">Install</span> بزنید و صبر کنید تا دانلود و نصب کامل شود.</li>
+            <li>در حین دانلود، شبیه‌ساز را نبندید و کامپیوتر را اسلیپ نکنید.</li>
+          </ol>
+          <div class="note note-info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <div>
+              <b>اکانت خود را از دست ندهید</b>
+              اگر اکانت مهمی دارید، قبل از هر چیز داخل بازی به مسیر <span class="chip">Settings → Account → Account Binding</span> بروید و اکانت را به <strong>Activision</strong> بایند کنید. این مطمئن‌ترین روش برای بازیابی بین دستگاه‌هاست. بایند به گوگل اگر آن اکانت گوگل قبلاً به یک اکانت کالاف دیگر وصل شده باشد، شکست می‌خورد.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STEP 8 -->
+      <article class="step rv" id="s8">
+        <div class="step-head">
+          <div class="step-n">۸</div>
+          <div>
+            <div class="step-title">سه دکمه اسمارت تول را <u>از پایین به بالا</u> بزنید</div>
+            <div class="step-sub">قلب این آموزش — ترتیب اینجا واقعاً مهم است</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>بازی و شبیه‌ساز را ببندید و اسمارت تول را با دسترسی ادمین اجرا کنید. اول <span class="chip">GAME VERSION</span> را روی <span class="chip">Global</span> و <span class="chip">FPS</span> را روی مقدار دلخواه بگذارید. حالا دکمه‌ها را <strong>از پایین شروع کنید و به سمت بالا بیایید</strong>:</p>
+          <ol>
+            <li><span class="chip">RESTORE DB</span> — <strong>اول این.</strong> کانفیگ را تمیز و پیش‌فرض می‌کند تا بقیه تنظیمات درست بنشیند.</li>
+            <li><span class="chip">APPLY KEYMAP</span> — <strong>بعد این.</strong> کی‌مپ بهینه‌شده وارد می‌شود.</li>
+            <li><span class="chip">BOOST FPS</span> — <strong>آخر این</strong> (دکمه نارنجی بزرگ). فریم اعمال می‌شود.</li>
+          </ol>
+          <div class="note note-danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div>
+              <b>این ترتیب را جابه‌جا نکنید</b>
+              اگر مثلاً اول <span class="en">Boost FPS</span> بزنید و بعد <span class="en">Restore DB</span>، دکمه دوم اثر دکمه اول را پاک می‌کند و عملاً کارتان بی‌نتیجه می‌ماند. همیشه: <strong>Restore DB ← Apply Keymap ← Boost FPS</strong>.
+            </div>
+          </div>
+          <div class="note note-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <div>
+              <b>زیاد کرش می‌کنید؟ به‌جای ۳۰۰ روی ۲۴۰ بگذارید</b>
+              این مطمئن‌ترین راه‌حل تجربه‌شده است. مقدار <span class="chip">300</span> برای خیلی از سیستم‌ها ناپایدار است و باعث بسته شدن مکرر می‌شود؛ با <strong><span class="chip">240</span> مشکل درست می‌شود</strong> و عملاً تفاوتی هم در حس بازی نمی‌بینید.
+            </div>
+          </div>
+          <p>در پنل لاگ سمت راست باید پیام‌هایی مثل <span class="mono">Configuration applied. Settings are active.</span> را ببینید — یعنی همه‌چیز درست اعمال شده است.</p>
+          <p><strong>Restore DB دقیقاً چه می‌کند؟</strong> فایل دیتابیس تنظیمات شبیه‌ساز یعنی <span class="chip">configs.db</span> را با یک نسخه پیش‌فرض بهینه جایگزین می‌کند. هم شروع تمیزِ این مرحله است، هم هر وقت تنظیمات به‌هم ریخت دکمه بازگشت شماست.</p>
+        </div>
+      </article>
+
+      <!-- STEP 9 -->
+      <article class="step rv" id="s9">
+        <div class="step-head">
+          <div class="step-n">۹</div>
+          <div>
+            <div class="step-title">بازی را از آیکون بالا سمت راست لانچ کنید</div>
+            <div class="step-sub">بعد از این یک مرحله مهم دیگر مانده — سینک کی‌مپ</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>بعد از اینکه هر سه دکمه را به ترتیب زدید، به <strong>بالا سمت راست اسمارت تول</strong> بروید و روی <strong>آیکون کالاف دیوتی موبایل</strong> کلیک کنید. بازی از همین‌جا لانچ می‌شود.</p>
+          <div class="note note-warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div>
+              <b>اگر بازی لانچ نشد، شیلترشکن بزنید</b>
+              گاهی لحظه لانچ به‌خاطر چک‌های شبکه گیر می‌کند. در این حالت <strong>وی‌پی‌ان را روشن کنید و دوباره لانچ بزنید</strong>. به‌محض اینکه بازی بالا آمد، <strong>وی‌پی‌ان را خاموش کنید</strong> تا پینگتان در مچ بالا نرود.
+            </div>
+          </div>
+          <div class="note note-danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M10 11v6M14 11v6"/></svg>
+            <div>
+              <b>با شیلترشکن هم نشد؟ باگ نصب خورده‌اید</b>
+              اگر وی‌پی‌ان را روشن کردید و باز هم لانچ نشد، یعنی <strong>نصبتان باگ خورده</strong> و با ترفند درست نمی‌شود. باید <strong>یک‌بار همه‌چیز را کامل حذف کنید و از اول نصب کنید</strong>. وقت تلف نکنید — تمیز نصب کردن از اول سریع‌تر از کلنجار رفتن با نصب خراب است.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STEP 10 -->
+      <article class="step rv" id="s10">
+        <div class="step-head">
+          <div class="step-n">۱۰</div>
+          <div>
+            <div class="step-title">کی‌مپ را با هاد کالاف سینک کنید و اکسپورت بگیرید</div>
+            <div class="step-sub">بدون این کار دکمه‌ها کار نمی‌کنند</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>بازی که بالا آمد و وارد کالاف شدید، هنوز کارتان تمام نشده. باید <strong>کی‌مپ گیم‌لوپ را با هاد (HUD) کالاف سینک کنید</strong> — یعنی دکمه‌های کی‌مپ را دقیقاً روی دکمه‌های واقعی رابط بازی تنظیم کنید. تا وقتی این سینک انجام نشود، <strong>دکمه‌ها کار نمی‌کنند</strong>.</p>
+          <div class="note note-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg>
+            <div>
+              <b>مهم‌ترین کار بعد از سینک: اکسپورت بگیرید</b>
+              به‌محض اینکه سینک را درست انجام دادید و دکمه‌ها کار کردند، <strong>یک‌بار از کی‌مپ فعلی اکسپورت بگیرید</strong> و فایلش را جای امنی نگه دارید. این کار زحمت سینک را برای همیشه ذخیره می‌کند.
+            </div>
+          </div>
+          <div class="note note-info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+            <div>
+              <b>هر بار که وارد بازی می‌شوید</b>
+              باید <strong>همان کی‌مپ اکسپورت‌شده را ایمپورت کنید</strong>. این یک بار مصرف نیست — تبدیل به عادت همیشگی‌تان می‌شود. برای همین است که اکسپورت گرفتن انقدر مهم است: اگر فایلش را داشته باشید، هر بار فقط چند ثانیه ایمپورت است؛ اگر نداشته باشید، باید کل سینک را از اول انجام دهید.
+            </div>
+          </div>
+          <div class="note note-warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div>
+              <b>اگر پنجره کی‌مپ اصلاً باز نمی‌شود</b>
+              دو راه‌حل دارد، هرکدام جواب داد از همان استفاده کنید:
+              <ol style="margin:8px 0 4px;padding-inline-start:22px">
+                <li><strong>DNS سیستم را روی <span class="chip">1.1.1.1</span> ست کنید</strong> — بعد از این کی‌مپ باز می‌شود.</li>
+                <li>یا <strong>شیلترشکن را روشن کنید، کی‌مپ را ست کنید، بعد دوباره خاموشش کنید</strong>.</li>
+              </ol>
+            </div>
+          </div>
+          <p>حالا یک مچ تمرینی بروید و تست کنید. اگر همه‌چیز درست باشد، حرکت با <span class="chip">WASD</span>، شلیک با کلیک چپ و نشانه‌روی با کلیک راست باید بدون تاخیر کار کند.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ SETTINGS ============ -->
+<section id="settings" class="wrap">
+  <div class="sec-head rv">
+    <div class="kicker">بهینه‌سازی</div>
+    <h2>ستینگ گیم‌لوپ هاب را دست نزنید</h2>
+    <p>مهم: ستینگ گیم‌لوپ هاب با گیم‌لوپ قدیمی <strong>کاملاً فرق دارد</strong>. آموزش‌های قدیمی که از «DirectX+»، «تخصیص هسته» یا «Rendering Cache» حرف می‌زنند به درد این نسخه نمی‌خورند — چنین گزینه‌هایی اینجا اصلاً وجود ندارند.</p>
+  </div>
+
+  <div class="note note-tip rv" style="margin-top:0;margin-bottom:var(--space-3)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+    <div>
+      <b>خلاصه این بخش: ستینگ را روی حالت دیفالت بگذارید</b>
+      گیم‌لوپ هاب خودش سخت‌افزار شما را تشخیص می‌دهد و بهینه تنظیم می‌کند. تنظیمات پیش‌فرض برای اکثر قریب‌به‌اتفاق کاربران بهترین گزینه است. کار اصلی بهینه‌سازی را <strong>اسمارت تول</strong> انجام می‌دهد، نه این پنل. جدول زیر فقط برای این است که بدانید هر گزینه چیست.
+    </div>
+  </div>
+
+  <div class="table-wrap rv">
+    <table>
+      <thead>
+        <tr><th>تب</th><th>گزینه</th><th>حالت پیش‌فرض / پیشنهادی</th><th>توضیح</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2"><strong class="en">Performance</strong></td>
+          <td>Performance Settings</td>
+          <td><span class="chip">High</span></td>
+          <td>پردازنده و رم را خودش تشخیص می‌دهد و نشان می‌دهد (مثلاً <span class="chip">6 Core</span> و <span class="chip">12G</span>). دستی چیزی تخصیص نمی‌دهید.</td>
+        </tr>
+        <tr>
+          <td>Graphics Card Rendering Mode</td>
+          <td><span class="chip chip-a">Auto</span></td>
+          <td>روی <strong>Auto</strong> بگذارید تا خودش بین <span class="chip">Vulkan</span> و <span class="chip">OpenGL</span> بهترین را انتخاب کند. فقط اگر مشکل گرافیکی داشتید دستی عوض کنید.</td>
+        </tr>
+        <tr>
+          <td rowspan="3"><strong class="en">Display</strong></td>
+          <td>Frame Rate Adjustment</td>
+          <td><span class="chip">240</span></td>
+          <td>بالاتر از توان سخت‌افزار = هدر رفتن منابع و لگ. خود پنل هم نرخ مانیتور شما را نشان می‌دهد.</td>
+        </tr>
+        <tr>
+          <td>Quality</td>
+          <td><span class="chip">Full HD (1080p)</span></td>
+          <td>سیستم ضعیف؟ <span class="chip">HD+ (900p)</span> یا <span class="chip">HD (720p)</span> — بیشترین تاثیر روی فریم را همین دارد.</td>
+        </tr>
+        <tr>
+          <td>Aspect Ratio</td>
+          <td><span class="chip">16:9</span></td>
+          <td>خود گیم‌لوپ هم با علامت 👍 همین را پیشنهاد می‌دهد. استاندارد کالاف موبایل است.</td>
+        </tr>
+        <tr>
+          <td><strong>بایوس</strong></td>
+          <td>مجازی‌سازی (VT)</td>
+          <td><span class="chip chip-a">Enabled</span></td>
+          <td>تنها موردی که واقعاً باید دستی انجام دهید و بیرون از گیم‌لوپ است. تفاوت بین «غیرقابل بازی» و «روان».</td>
+        </tr>
+        <tr>
+          <td><strong>ویندوز</strong></td>
+          <td>حافظه مجازی</td>
+          <td><span class="chip">2× RAM</span></td>
+          <td>اختیاری. برای ۸ گیگ رم، حدود <span class="chip">16000 MB</span>. اگر رم زیاد دارید لازم نیست.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note note-info rv">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <div>
+      <b>نکته درباره فریم‌ریت</b>
+      اگر مانیتور شما مثلاً ۱۴۴ هرتز است، تنظیم فریم روی ۲۴۰ فقط CPU و GPU را بی‌دلیل داغ می‌کند و خودِ پنل هم همین را هشدار می‌دهد. منطقی است فریم را کمی بالاتر از نرخ رفرش مانیتورتان بگذارید، نه خیلی بالاتر.
+    </div>
+  </div>
+
+  <div class="grid g2 rv" style="margin-top:var(--space-3)">
+    <div class="note note-tip" style="margin:0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      <div>
+        <b>ترفندهای اضافه برای فریم بیشتر</b>
+        در ویندوز حالت <strong>High Performance</strong> را فعال کنید؛ در پنل انویدیا/AMD گیم‌لوپ را روی کارت گرافیک اصلی بگذارید؛ درایور گرافیک را آپدیت کنید؛ و هنگام بازی مرورگر و برنامه‌های سنگین را ببندید.
+      </div>
+    </div>
+    <div class="note note-info" style="margin:0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="7"/><path d="M12 6v4"/></svg>
+      <div>
+        <b>دکمه‌های کناری ماوس کار نمی‌کنند؟</b>
+        گیم‌لوپ معمولاً نمی‌تواند دکمه‌های کناری ماوس را مستقیم به‌عنوان ورودی مجزا بخواند. راه‌حل: اول در کی‌مپ یک کلید بلااستفاده کیبورد (مثلاً <span class="chip">J</span>) را به آن اکشن اختصاص دهید، بعد در نرم‌افزار ماوس همان کلید <span class="chip">J</span> را روی دکمه کناری بایند کنید.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TROUBLESHOOT ============ -->
+<section id="troubleshoot" class="wrap">
+  <div class="sec-head rv">
+    <div class="kicker">رفع اشکال</div>
+    <h2>مشکلات رایج و راه‌حل آن‌ها</h2>
+    <p>اگر جایی گیر کردید، اول اینجا را چک کنید. تقریباً همه مشکلات پرتکرار اینجا پوشش داده شده است.</p>
+  </div>
+
+  <div class="grid g3">
+    <div class="card rv">
+      <div class="ico" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);color:#fca5a5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+      <h3>صفحه سیاه هنگام اجرا</h3>
+      <p>معمولاً یعنی VT خاموش است یا درایور گرافیک قدیمی است. اول VT را چک کنید، بعد درایور را آپدیت کنید. اگر باز هم بود، در تب <span class="en">Performance</span> رندرینگ را از <span class="chip">Auto</span> به <span class="chip">Vulkan</span> یا <span class="chip">OpenGL</span> عوض کنید.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4);color:#fcd34d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg></div>
+      <h3>شبیه‌ساز مدام کرش می‌کند</h3>
+      <p><strong>راه‌حل اول: فریم را از ۳۰۰ به <span class="chip">240</span> کاهش دهید</strong> — اکثر کرش‌های مکرر با همین درست می‌شود. اگر باز هم ادامه داشت، <span class="chip">Restore DB</span> بزنید و سه دکمه را از نو به ترتیب اعمال کنید.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico" style="background:rgba(244,63,94,.12);border-color:rgba(244,63,94,.4);color:#fda4af"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="7"/><path d="M12 6v4"/></svg></div>
+      <h3>بازی اصلاً لانچ نمی‌شود</h3>
+      <p><strong>اول شیلترشکن را روشن کنید و دوباره روی آیکون کالاف بزنید</strong> (بعد از بالا آمدن بازی خاموشش کنید). اگر با این هم نشد، <strong>باگ نصب خورده‌اید</strong> — باید کامل حذف و از اول نصب کنید.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 15h8"/></svg></div>
+      <h3>پنجره کی‌مپ باز نمی‌شود</h3>
+      <p><strong>DNS سیستم را روی <span class="chip">1.1.1.1</span> ست کنید</strong> — بعد از این باز می‌شود. راه دوم: شیلترشکن را روشن کنید، کی‌مپ را ست کنید، بعد دوباره خاموشش کنید.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 15h8"/></svg></div>
+      <h3>دکمه‌ها در بازی کار نمی‌کنند</h3>
+      <p>یعنی <strong>کی‌مپ را با هاد کالاف سینک نکرده‌اید</strong>. طبق مرحله ۱۰ سینک کنید، بعد حتماً اکسپورت بگیرید تا دفعه بعد فقط ایمپورتش کنید.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4);color:#fcd34d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg></div>
+      <h3>کی‌مپ اصلاً اعمال نشد</h3>
+      <p>چهار علت اصلی: (۱) دکمه‌ها به ترتیب درست زده نشده‌اند، (۲) Arena Breakout از سایت رسمی نصب نشده، (۳) نسخه اشتباه بازی انتخاب شده، (۴) اسمارت تول بدون دسترسی ادمین اجرا شده.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <h3>لاگین گوگل / پلی‌استور خطا می‌دهد</h3>
+      <p>Auto Login را خاموش کنید، کامل Log out کنید، سرور وی‌پی‌ان را عوض کنید و Google Play Services را آپدیت کنید. سپس دوباره تلاش کنید.</p>
+    </div>
+    <div class="card rv">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></div>
+      <h3>بعد از آپدیت بازی همه‌چیز به‌هم ریخت</h3>
+      <p>طبیعی است. بعد از هر آپدیت کالاف، اسمارت تول را باز کنید، نسخه جدید را انتخاب و دوباره <span class="chip">Apply Keymap</span> بزنید. منتظر نسخه سازگار ابزار بمانید.</p>
+    </div>
+  </div>
+
+  <div class="note note-warn rv" style="margin-top:var(--space-3)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+    <div>
+      <b>وضعیت فعلی اکوسیستم (مهم)</b>
+      اکوسیستم گیم‌لوپ در حال گذار به بیلد جدید <span class="en">Tenstore Android Connect</span> است و این گذار هنوز کاملاً پایدار نیست. بعد از آخرین آپدیت‌های کالاف موبایل، ناسازگاری‌های گسترده‌ای گزارش شده که گاهی کی‌مپ هوشمند را از کار می‌اندازد. اگر با وجود انجام درست همه مراحل باز هم کی‌مپ کار نکرد، احتمالاً مشکل از سمت شما نیست — منتظر نسخه به‌روزشده ابزار بمانید.
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="wrap">
+  <div class="sec-head rv">
+    <div class="kicker">پرسش و پاسخ</div>
+    <h2>سوالات متداول</h2>
+    <p>سوال‌هایی که بیشترین تکرار را بین کاربران فارسی‌زبان دارند.</p>
+  </div>
+
+  <div class="faq rv">
+    <details open>
+      <summary>با گیم‌لوپ بن می‌شوم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">خیر. گیم‌لوپ شبیه‌ساز <strong>رسمی و مورد تایید تنسنت</strong> است (تنسنت مالک تیمی استودیو، سازنده کالاف موبایل، است). به‌جای بن شدن، شما در لابی‌های مخصوص بازیکنان کیبورد و ماوس قرار می‌گیرید. در مقابل، شبیه‌سازهایی مثل بلواستکس یا ال‌دی‌پلیر احتمال بن شدن بالایی دارند و گزارش‌هایی از بن سطح دستگاه برای کاربران شبیه‌سازهای پشتیبانی‌نشده وجود دارد.</div>
+    </details>
+    <details>
+      <summary>یعنی با موبایلی‌ها بازی نمی‌کنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">درست است. بازیکنان شبیه‌ساز و کنترلر جامعه جداگانه خود را دارند و مکرراً در یک لابی قرار می‌گیرند. بازیکنان تاچ موبایل دیگر مقابل شما قرار نمی‌گیرند. نتیجه: مچ‌ها منصفانه‌تر ولی معمولاً <strong>سخت‌تر</strong> هستند، چون همه حریفانتان کیبورد و ماوس دارند.</div>
+    </details>
+    <details>
+      <summary>حتماً باید VPN داشته باشم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">برای <strong>دانلود و نصب</strong> بله؛ سایت رسمی و سرورهای دانلود و پلی‌استور از ایران در دسترس نیستند. اما برای <strong>خود بازی کردن</strong>، معمولاً بهتر است وی‌پی‌ان معمولی را خاموش کنید تا پینگ بالا نرود — مگر اینکه گیم‌وی‌پی‌ان اختصاصی با روتینگ بهینه داشته باشید.</div>
+    </details>
+    <details>
+      <summary>فرق گیم‌لوپ هاب با گیم‌لوپ قدیمی چیست؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">گیم‌لوپ هاب موتور و رابط جدیدتری دارد، منابع سیستم را بهینه‌تر مصرف می‌کند و اکوسیستم ابزارهای جامعه کاربری (مثل اسمارت تول و کی‌مپ‌های آماده) حول آن ساخته شده است. عملکردش نسبت به نسخه قبلی محسوساً بهتر است. توجه کنید که سایت <span class="en">gameloophub.com</span> یک <strong>پلتفرم مستقل جامعه کاربری</strong> است و با سایت رسمی <span class="en">gameloop.com</span> فرق دارد.</div>
+    </details>
+    <details>
+      <summary>اسمارت تول ویروس است؟ آنتی‌ویروس گیرش می‌دهد! <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">هشدار آنتی‌ویروس برای این ابزار در اکثر موارد <strong>False Positive</strong> است، چون ابزار مستقیماً فایل <span class="chip">configs.db</span> شبیه‌ساز را ویرایش می‌کند و این رفتار برای آنتی‌ویروس مشکوک به‌نظر می‌رسد. با این حال: <strong>فقط از منبع اصلی دانلود کنید</strong> و به هیچ فایلی که از کانال‌های ناشناس یا با عنوان «کرک/بوستر رایگان» پخش می‌شود اعتماد نکنید.</div>
+    </details>
+    <details>
+      <summary>واقعاً ۳۰۰ فریم می‌گیرم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">اسمارت تول <strong>قفل</strong> فریم را باز می‌کند، اما اینکه واقعاً چند فریم بگیرید کاملاً به سخت‌افزار شما بستگی دارد. ضمناً <strong>۳۰۰ توصیه نمی‌شود</strong>: برای خیلی از سیستم‌ها ناپایدار است و باعث کرش‌های مکرر می‌شود — <span class="chip">240</span> هم پایدارتر است و هم عملاً تفاوتی در حس بازی ندارد. اگر مانیتور شما ۶۰ هرتز است، عملاً بیش از ۶۰ فریم نمی‌بینید و بقیه‌اش فقط CPU و GPU را داغ می‌کند.</div>
+    </details>
+    <details>
+      <summary>چطور بفهمم VT روی سیستم من روشن است؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">لازم نیست ری‌استارت کنید یا وارد بایوس شوید — از <strong>تسک منیجر</strong> معلوم می‌شود: کلیدهای <span class="chip">Ctrl</span> + <span class="chip">Shift</span> + <span class="chip">Esc</span> را بزنید، به تب <span class="chip">Performance</span> بروید، روی <span class="chip">CPU</span> کلیک کنید و خط <span class="chip">Virtualization</span> را ببینید. اگر <strong>Enabled</strong> بود کارتان تمام است؛ اگر <strong>Disabled</strong> بود باید از بایوس روشنش کنید. اگر این خط را اصلاً ندیدید، <span class="chip">Win</span> + <span class="chip">R</span> بزنید و <span class="chip">msinfo32</span> را اجرا کنید.</div>
+    </details>
+    <details>
+      <summary>سیستم ضعیفی دارم، چه کنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">به ترتیب تاثیر: (۱) VT را حتماً روشن کنید، (۲) در تب <span class="en">Display</span> کیفیت را به <span class="chip">HD (720p)</span> کاهش دهید، (۳) فریم را روی ۶۰ یا ۹۰ بگذارید نه ۲۴۰، (۴) گرافیک داخل بازی را روی Low و Frame Rate را روی Max بگذارید، (۵) حافظه مجازی ویندوز را دو برابر رم کنید، (۶) هنگام بازی مرورگر را ببندید.</div>
+    </details>
+    <details>
+      <summary>اکانتم را چطور از موبایل به کامپیوتر منتقل کنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">روی موبایل به <span class="chip">Settings → Account → Account Binding</span> بروید و اکانت را به <strong>Activision</strong> بایند کنید (مطمئن‌ترین روش انتقال بین دستگاه‌ها). بعد در گیم‌لوپ با همان اکانت Activision لاگین کنید. برای لایه امنیتی بیشتر، می‌توانید اکانت Activision را به گوگل هم لینک کنید.</div>
+    </details>
+    <details>
+      <summary>«Link unsuccessful» می‌دهد وقتی می‌خواهم به گوگل بایند کنم <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">شایع‌ترین علت: آن اکانت گوگل <strong>قبلاً به یک اکانت کالاف دیگر بایند شده</strong> است. علت‌های دیگر: لاگین نبودن یا قدیمی بودن Play Games، خراب بودن دیتای مهمان محلی، یا مشکل موقت سرور. راه‌حل مطمئن‌تر: به‌جای گوگل، به Activision بایند کنید. اگر مشکل ادامه داشت، باید با پشتیبانی Activision تماس بگیرید.</div>
+    </details>
+    <details>
+      <summary>بعد از اعمال تنظیمات شبیه‌ساز بسته می‌شود، خراب شده؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">نه لزوماً. بسته شدن ناگهانی در <strong>چند اجرای اول</strong> رفتار عادی و شناخته‌شده‌ای است. اما اگر مدام تکرار شد، به ترتیب: (۱) <strong>فریم را از ۳۰۰ به <span class="chip">240</span> کاهش دهید</strong> — این راه‌حل اکثر موارد است؛ (۲) اگر باز هم بود <span class="chip">Restore DB</span> بزنید و سه دکمه را از نو به ترتیب درست اعمال کنید.</div>
+    </details>
+    <details>
+      <summary>چرا باید دکمه‌ها را از پایین به بالا بزنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">چون هر دکمه روی همان فایل کانفیگ کار می‌کند و ترتیبشان روی نتیجه اثر می‌گذارد. <span class="chip">Restore DB</span> اول می‌آید تا از یک کانفیگ تمیز شروع کنید؛ بعد <span class="chip">Apply Keymap</span> کی‌مپ را می‌نویسد؛ آخر <span class="chip">Boost FPS</span> فریم را اعمال می‌کند. اگر برعکس بزنید، مثلاً Restore DB بعد از Boost FPS، همان Restore کار Boost را پاک می‌کند و فکر می‌کنید ابزار خراب است.</div>
+    </details>
+    <details>
+      <summary>ستینگ گیم‌لوپ هاب را چطور تنظیم کنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans"><strong>دست نزنید — دیفالت بگذارید.</strong> ستینگ گیم‌لوپ هاب با نسخه قدیمی کاملاً فرق دارد و خودش سخت‌افزار شما را تشخیص می‌دهد و بهینه تنظیم می‌کند. گزینه‌هایی مثل <span class="en">DirectX+</span>، تخصیص دستی هسته یا <span class="en">Rendering Cache</span> که در آموزش‌های قدیمی می‌بینید، در این نسخه <strong>اصلاً وجود ندارند</strong>. کار اصلی بهینه‌سازی را اسمارت تول انجام می‌دهد نه پنل ستینگ.</div>
+    </details>
+    <details>
+      <summary>بازی لانچ نمی‌شود، چه کنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans"><strong>شیلترشکن را روشن کنید و دوباره روی آیکون کالاف (بالا سمت راست اسمارت تول) بزنید.</strong> گاهی لحظه لانچ به‌خاطر چک‌های شبکه گیر می‌کند. نکته مهم: <strong>به‌محض اینکه بازی بالا آمد وی‌پی‌ان را خاموش کنید</strong>، وگرنه پینگتان در مچ بالا می‌رود.<br><br>اگر این کار را کردید و باز هم لانچ نشد، یعنی <strong>باگ نصب خورده‌اید</strong>. با هیچ ترفندی درست نمی‌شود — باید <strong>یک‌بار کامل حذف کنید و از اول نصب کنید</strong>.</div>
+    </details>
+    <details>
+      <summary>بازی بالا آمد ولی هیچ دکمه‌ای کار نمی‌کند! <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">چون هنوز <strong>کی‌مپ را با هاد (HUD) کالاف سینک نکرده‌اید</strong>. لانچ شدن بازی آخر کار نیست — بعد از ورود به کالاف باید دکمه‌های کی‌مپ گیم‌لوپ را دقیقاً روی دکمه‌های واقعی رابط بازی تنظیم کنید. تا این سینک انجام نشود دکمه‌ها کار نمی‌کنند. کاملش در <a href="#s10">مرحله ۱۰</a> آمده.</div>
+    </details>
+    <details>
+      <summary>هر بار که وارد بازی می‌شوم باید کی‌مپ را از اول بسازم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">نه — به شرطی که یک‌بار <strong>اکسپورت</strong> گرفته باشید. روال درست این است: یک‌بار سینک کنید، بعد فوراً <strong>از کی‌مپ اکسپورت بگیرید</strong> و فایلش را جای امنی نگه دارید. از آن به بعد <strong>هر بار که وارد بازی می‌شوید فقط همان کی‌مپ را ایمپورت می‌کنید</strong> — چند ثانیه بیشتر طول نمی‌کشد. اگر اکسپورت نگرفته باشید، باید کل سینک را از اول انجام دهید؛ برای همین این مرحله انقدر مهم است.</div>
+    </details>
+    <details>
+      <summary>پنجره کی‌مپ اصلاً باز نمی‌شود <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">دو راه‌حل دارد: <strong>(۱)</strong> <span class="chip">DNS</span> سیستم را روی <span class="chip">1.1.1.1</span> ست کنید — بعد از این کی‌مپ باز می‌شود. <strong>(۲)</strong> یا شیلترشکن را روشن کنید، کی‌مپ را ست کنید، و بعد دوباره خاموشش کنید. هرکدام برایتان راحت‌تر بود از همان استفاده کنید.</div>
+    </details>
+    <details>
+      <summary>Restore DB اطلاعات بازی من را پاک می‌کند؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">خیر. این دکمه فقط فایل <span class="chip">configs.db</span> یعنی <strong>دیتابیس تنظیمات خود شبیه‌ساز</strong> را با نسخه پیش‌فرض بهینه جایگزین می‌کند. اکانت و پیشرفت شما داخل بازی است و به اکانت Activision/گوگل شما گره خورده، نه به این فایل.</div>
+    </details>
+    <details>
+      <summary>چرا باید Arena Breakout نصب کنم وقتی می‌خواهم کالاف بازی کنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">قرار نیست بازی‌اش کنید. نصب <strong class="en">Arena Breakout: Realistic FPS</strong> از سایت رسمی، <strong>هسته و محیط اندروید شبیه‌ساز</strong> را روی سیستم می‌آورد — همان چیزی که گیم‌لوپ هاب برای اجرای کالاف به آن نیاز دارد. بعد از نصب دیگر کاری با خودش ندارید. این مرحله‌ای است که خیلی‌ها ردش می‌کنند و بعد می‌گویند «کالاف اجرا نمی‌شود».</div>
+    </details>
+    <details>
+      <summary>بعد از نصب Arena Breakout یک پنجره چینی باز می‌شود! <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">یعنی به‌جای نسخه گلوبال، <strong>نسخه چینی</strong> برایتان نصب شده — معمولاً تقصیر شیلترشکن و مسیر خروج آن است. راه‌حل: <strong>کاملاً پاکش کنید، شیلترشکن را به سرور یا سرویس دیگری عوض کنید و دوباره نصب کنید.</strong> تا وقتی پنجره چینی می‌آید ادامه ندهید، چون بقیه مراحل درست کار نخواهد کرد.</div>
+    </details>
+    <details>
+      <summary>باید منابع HD را دانلود کنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans"><strong>لازم نیست.</strong> شاید در بعضی آموزش‌ها بخوانید که منابع HD برای درست کار کردن کی‌مپ ضروری است — این درست نیست و ربطی به کی‌مپ ندارد. اگر دوست دارید کیفیت بافت‌ها بهتر باشد دانلودش کنید، وگرنه بی‌خیالش شوید؛ روی کارکرد کی‌مپ اثری ندارد.</div>
+    </details>
+    <details>
+      <summary>دکمه‌های کناری ماوسم شناسایی نمی‌شوند <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">محدودیت شناخته‌شده گیم‌لوپ است؛ دکمه‌های کناری ماوس معمولاً به‌عنوان ورودی مجزا خوانده نمی‌شوند. راه‌حل دو مرحله‌ای: اول داخل کی‌مپ شبیه‌ساز، اکشن موردنظر را به یک کلید بلااستفاده کیبورد مثل <span class="chip">J</span> بدهید؛ سپس در نرم‌افزار اختصاصی ماوس (Logitech G Hub، Razer Synapse و…) همان کلید <span class="chip">J</span> را روی دکمه کناری بایند کنید.</div>
+    </details>
+    <details>
+      <summary>بعد از هر آپدیت کالاف باید همه‌چیز را از نو تنظیم کنم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">معمولاً فقط باید در اسمارت تول <strong>نسخه جدید بازی را انتخاب و دوباره Apply Keymap بزنید</strong>. اما اگر آپدیت رابط کاربری را جابه‌جا کرده باشد، ممکن است تا انتشار نسخه سازگار ابزار، کی‌مپ درست کار نکند. این دقیقاً همان اتفاقی است که در گذار به بیلد Tenstore افتاد.</div>
+    </details>
+    <details>
+      <summary>Tenstore Android Connect چیست؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">نام بیلد و اکوسیستم جدیدی است که گیم‌لوپ در حال مهاجرت به آن است. این گذار هنوز کاملاً پایدار نشده و بعد از آپدیت‌های اخیر کالاف، ناسازگاری‌های گسترده‌ای (از جمله از کار افتادن کی‌مپ هوشمند) گزارش شده — حتی برای کاربران نسخه چین. ابزارهای اختصاصی برای این بیلد جداگانه منتشر می‌شوند.</div>
+    </details>
+    <details>
+      <summary>گیم‌لوپ رایگان است؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">بله، خود گیم‌لوپ کاملاً رایگان و استفاده از آن امن است (به شرط دانلود از سایت رسمی). اسمارت تول هم رایگان توسط جامعه کاربری منتشر می‌شود. اگر جایی از شما برای «نسخه پرمیوم» پول خواستند، تقریباً قطعاً کلاهبرداری است.</div>
+    </details>
+    <details>
+      <summary>می‌توانم بتل‌پس بخرم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">بله، از طریق پلی‌استور داخل شبیه‌ساز — به شرطی که لاگین گوگل درست انجام شده باشد و روش پرداخت معتبری روی اکانتتان باشد. بسیاری از کاربران دقیقاً به همین دلیل روی مشکل دسترسی به پلی‌استور گیر می‌کنند، پس مرحله ۶ را با دقت انجام دهید.</div>
+    </details>
+    <details>
+      <summary>گیم‌لوپ روی ویندوز ۱۱ کار می‌کند؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">بله. مستندات رسمی هنوز ویندوز ۷ تا ۱۰ را ذکر می‌کند، اما گیم‌لوپ برای بیلدهای مدرن ویندوز ۱۰ و ۱۱ بهینه شده و روی ویندوز ۱۱ به‌خوبی کار می‌کند. نکته: در ویندوز ۱۱ حتماً مطمئن شوید <strong>Hyper-V و Memory Integrity</strong> با مجازی‌سازی شبیه‌ساز تداخل نداشته باشند.</div>
+    </details>
+    <details>
+      <summary>چقدر فضای دیسک لازم دارم؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">نصاب گیم‌لوپ هاب فقط <span class="chip">7.8 MB</span> و اسمارت تول حدود <span class="chip">80 MB</span> است، اما این‌ها فقط لانچر هستند. با احتساب شبیه‌ساز، Arena Breakout و خود کالاف، روی <strong>حدود ۱۵ تا ۲۰ گیگابایت فضای خالی</strong> حساب کنید — ترجیحاً روی SSD.</div>
+    </details>
+    <details>
+      <summary>پینگم بالاست، تقصیر گیم‌لوپ است؟ <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="ans">معمولاً نه. پینگ به اینترنت، مسیر شبکه و سرور انتخابی بازی مربوط است، نه به شبیه‌ساز. چک کنید: وی‌پی‌ان معمولی هنگام بازی خاموش باشد، از کابل شبکه به‌جای وای‌فای استفاده کنید، دانلودهای پس‌زمینه را متوقف کنید و در بازی نزدیک‌ترین سرور را انتخاب کنید. فریم پایین و پینگ بالا دو مشکل کاملاً متفاوت‌اند و نباید با هم اشتباه گرفته شوند.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ COMMUNITY ============ -->
+<section id="community" class="wrap">
+  <div class="sec-head rv">
+    <div class="kicker">پشتیبانی و کامیونیتی</div>
+    <h2>سوالت اینجا جواب داده می‌شود</h2>
+    <p>اگر جایی گیر کردی یا دنبال فایل‌های نصب و شیلترشکن می‌گردی، از این دو راه با ما در ارتباط باش.</p>
+  </div>
+
+  <div class="tg-grid">
+    <div class="tg-card rv">
+      <div class="tg-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <h3>گروه پشتیبانی و کامیونیتی</h3>
+      <div class="tg-handle">t.me/Z13_GP</div>
+      <p>سوالاتت را همین‌جا بپرس و پشتیبانی بگیر. کنار بقیه بچه‌های کامیونیتی باش — خیلی وقت‌ها مشکلی که داری را یک نفر دیگر قبلاً حل کرده.</p>
+      <a class="tg-btn" href="https://t.me/Z13_GP" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        عضویت در گروه
+      </a>
+    </div>
+
+    <div class="tg-card rv">
+      <div class="tg-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+      </div>
+      <h3>کانال تلگرام — فایل‌های نصب</h3>
+      <div class="tg-handle">t.me/The_Z13</div>
+      <p>دسترسی مستقیم به فایل‌های نصب، شیلترشکن و بقیه چیزهایی که در این آموزش لازم داری. اگر لینکی از داخل سایت باز نشد، سراغ کانال برو.</p>
+      <a class="tg-btn alt" href="https://t.me/The_Z13" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        عضویت در کانال
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <defs><linearGradient id="g2" x1="0" y1="0" x2="24" y2="24">
+              <stop offset="0" stop-color="#A78BFA"/><stop offset="1" stop-color="#F43F5E"/></linearGradient></defs>
+            <rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4M8 10v4"/>
+            <circle cx="16" cy="11" r="1"/><circle cx="18.5" cy="13.5" r="1"/>
+          </svg>
+          <span>آموزش گیم‌لوپ هاب</span>
+        </div>
+        <p>راهنمای فارسی نصب کالاف دیوتی موبایل روی کامپیوتر با گیم‌لوپ هاب و اسمارت تول. سوالی داشتید در <a href="https://t.me/Z13_GP" target="_blank" rel="noopener noreferrer">گروه تلگرام</a> بپرسید یا در لایو و کامنت‌ها — جواب داده می‌شود.</p>
+      </div>
+      <div>
+        <h5>بخش‌ها</h5>
+        <ul>
+          <li><a href="#requirements">پیش‌نیازها</a></li>
+          <li><a href="#steps">مراحل نصب</a></li>
+          <li><a href="#settings">بهترین تنظیمات</a></li>
+          <li><a href="#troubleshoot">رفع مشکل</a></li>
+          <li><a href="#faq">سوالات متداول</a></li>
+          <li><a href="#community">پشتیبانی و کامیونیتی</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>منابع</h5>
+        <ul>
+          <li><a href="https://t.me/Z13_GP" target="_blank" rel="noopener noreferrer">گروه پشتیبانی تلگرام</a></li>
+          <li><a href="https://t.me/The_Z13" target="_blank" rel="noopener noreferrer">کانال تلگرام (فایل‌های نصب)</a></li>
+          <li><a href="https://www.gameloop.com" target="_blank" rel="noopener noreferrer">سایت رسمی گیم‌لوپ</a></li>
+          <li><a href="https://gameloophub.com" target="_blank" rel="noopener noreferrer">گیم‌لوپ هاب (جامعه کاربری)</a></li>
+          <li><a href="https://gameloophub.com/tools/cod-mobile-smart-tool/" target="_blank" rel="noopener noreferrer">صفحه COD Mobile Smart Tool</a></li>
+          <li><a href="https://gameloophub.com/guides/" target="_blank" rel="noopener noreferrer">راهنماهای گیم‌لوپ هاب</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy">
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:var(--space-2)">
+        <a class="madeby madeby-full" href="https://www.instagram.com/lhadirahimil/" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+          <span class="madeby-label">ساخته شده توسط</span>
+          <span class="madeby-name">Dude PC</span>
+          <svg class="madeby-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        </a>
+        <a class="madeby madeby-full" href="https://www.instagram.com/mnf1998/" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+          <span class="madeby-label">ساخته شده توسط</span>
+          <span class="madeby-name">mnf1998</span>
+          <svg class="madeby-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        </a>
+      </div>
+      <p style="margin-bottom:10px">
+        آموزش برای اولین بار توسط
+        <a href="https://www.aparat.com/thez13/live/" target="_blank" rel="noopener noreferrer">Z13</a>
+        و
+        <a href="https://www.aparat.com/Snipergirl/live" target="_blank" rel="noopener noreferrer">SniperGirl</a>
+      </p>
+      این سایت یک راهنمای آموزشی مستقل و غیررسمی است و به Tencent، GameLoop یا Activision وابستگی ندارد.
+      تمام نام‌های تجاری متعلق به مالکان خودشان است.
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  // mobile menu
+  var btn = document.getElementById('menuBtn');
+  var links = document.getElementById('navLinks');
+  btn.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+  links.addEventListener('click', function(e){
+    if (e.target.tagName === 'A') {
+      links.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  // scroll progress
+  var bar = document.getElementById('bar');
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // reveal on scroll
+  var revealables = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window) {
+    var ro = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) { en.target.classList.add('in'); ro.unobserve(en.target); }
+      });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
+    revealables.forEach(function(el, i){
+      el.style.transitionDelay = Math.min(i % 6, 5) * 45 + 'ms';
+      ro.observe(el);
+    });
+  } else {
+    revealables.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // step rail scroll-spy
+  var railLinks = Array.prototype.slice.call(document.querySelectorAll('#rail a'));
+  var stepEls = railLinks.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  if ('IntersectionObserver' in window && stepEls.length && stepEls[0]) {
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        var i = stepEls.indexOf(en.target);
+        if (i < 0) return;
+        railLinks.forEach(function(a){ a.classList.remove('active'); });
+        railLinks[i].classList.add('active');
+      });
+    }, {rootMargin:'-15% 0px -70% 0px', threshold:0});
+    stepEls.forEach(function(el){ if (el) spy.observe(el); });
+  }
+
+  // accordion: one open at a time
+  var faqItems = document.querySelectorAll('.faq details');
+  faqItems.forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if (!d.open) return;
+      faqItems.forEach(function(o){ if (o !== d) o.open = false; });
+    });
+  });
+})();
+</script>
+</body>
+</html>
